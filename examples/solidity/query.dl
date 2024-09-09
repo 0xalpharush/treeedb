@@ -1,0 +1,81 @@
+// To test:
+// cargo build
+// cd examples/java
+// ../../target/debug/treeedbgen-souffle-java --prefix java -o treeedb-java.dl
+// ../../target/debug/treeedb-java Main.java
+// souffle const-binop.dl
+
+#include "treeedb-solidity.dl"
+
+.decl is_public(expr: SolidityFunctionDefinition)
+
+is_public(def) :-
+  solidity_function_definition(def),
+  solidity_function_definition_visibility_c(def, mut),
+  solidity_visibility(mut),
+  solidity_node_text(mut, visibility),
+  visibility = "public".
+
+.decl is_nonreentrant(expr: SolidityFunctionDefinition)
+
+is_nonreentrant(def) :-
+  solidity_function_definition(def),
+  solidity_function_definition_modifier_invocation_c(def, mod),
+  solidity_modifier_invocation_identifier_c(mod, i),
+  solidity_identifier(i),
+  solidity_node_text(i, name),
+  (
+    name = "nonReentrant";
+    name = "locked"
+  ).
+
+.decl show_is_public(text: SolidityNodeText)
+
+show_is_public(text) :-
+  is_public(def),
+  is_nonreentrant(def),
+  solidity_function_definition_name_f(def, mut),
+  solidity_node_text(mut, text).
+
+
+.decl func_decl(function: SolidityNodeText)
+func_decl(name) :-
+    solidity_function_definition(f),
+    solidity_function_definition_name_f(f, n),
+    solidity_node_text(n, name).
+
+// Nodes belonging to a particular function
+.decl parent_func(function: SolidityIdentifier, node: SolidityNode)
+
+parent_func(as(identifier, SolidityIdentifier), n) :-
+    solidity_function_definition_name_f(n, identifier).
+
+parent_func(as(f, SolidityIdentifier), child) :-
+    parent_func(f, parent),
+    (solidity_field(parent, _, child); solidity_child(parent, child)).
+
+.decl show_parent_func(function: SolidityNodeText, node_type: symbol)
+show_parent_func(function, ty) :-
+    parent_func(f, n),
+    solidity_node_text(f, function),
+    solidity_node(n, ty, _, _, _, _, _, _, _, _, _, _, _).
+
+.output show_parent_func(IO=stdout)
+
+// Direct function calls
+.decl direct_call(callee: SolidityNodeText, caller: SolidityNodeText)
+
+direct_call(callee, caller) :-
+    solidity_call_expression_function_f(call_expr, callee_func),
+    parent_func(caller_func, call_expr),
+
+    solidity_node_text(callee_func, callee),
+    solidity_node_text(caller_func, caller),
+//
+    func_decl(caller),
+    func_decl(callee).
+
+// .output is_public(IO=stdout)
+// .output show_is_public(IO=stdout)
+
+.output direct_call(IO=stdout)

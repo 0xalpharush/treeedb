@@ -508,6 +508,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-solidity"
+version = "0.0.3"
+source = "git+https://github.com/0xalpharush/tree-sitter-solidity?rev=3e26757#3e26757601014c4c70dff704a004b05eaac212ac"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
+
+[[package]]
 name = "tree-sitter-souffle"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -579,6 +588,15 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "tree-sitter-rust",
+ "treeedb",
+]
+
+[[package]]
+name = "treeedb-solidity"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "tree-sitter-solidity",
  "treeedb",
 ]
 
@@ -678,6 +696,18 @@ dependencies = [
  "predicates",
  "tempfile",
  "tree-sitter-rust",
+ "treeedbgen-souffle",
+]
+
+[[package]]
+name = "treeedbgen-souffle-solidity"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "predicates",
+ "tempfile",
+ "tree-sitter-solidity",
  "treeedbgen-souffle",
 ]
 

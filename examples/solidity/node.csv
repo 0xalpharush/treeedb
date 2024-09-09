@@ -1,0 +1,189 @@
+5240829040,source_file,true,false,false,false,0,1063,0,0,45,1,"contract Test { \n	mapping(uint => uint) splits;\n	mapping(uint => uint) deposits;\n	mapping(uint => address payable) payee1;\n	mapping(uint => address payable) payee2;\n	uint lock;\n	modifier locked() {\n		require(lock == 0);\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	modifier nonReentrant() {\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	function updateSplit(uint id, uint split) locked public{\n		require(split <= 100);\n		splits[id] = split;\n	}\n	// [Step 1]: Set split of ’a’ (id = 0) to 100(%)\n        // [Step 4]: Set split of ’a’ (id = 0) to 0(%)\n	function splitFunds(uint id) public nonReentrant {\n		address payable a = payee1[id];\n		address payable b = payee2[id];\n		uint depo = deposits[id];\n		deposits[id] = 0;\n\n                // [Step 2]: Transfer 100% fund to ’a’\n                // [Step 3]: Reenter updateSplit\n		a.call{value:(depo * splits[id] / 100)}("""");\n                 \n                 // [Step 5]: Transfer 100% fund to ’b’\n		b.transfer(depo * (100 - splits[id]) / 100);\n\n		p();\n		d();\n 	}\n	function p() private {\n	}\n	function d() private {\n		p();\n\n	}\n}"
+5240839056,contract_declaration,true,false,false,false,0,1063,0,0,45,1,"contract Test { \n	mapping(uint => uint) splits;\n	mapping(uint => uint) deposits;\n	mapping(uint => address payable) payee1;\n	mapping(uint => address payable) payee2;\n	uint lock;\n	modifier locked() {\n		require(lock == 0);\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	modifier nonReentrant() {\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	function updateSplit(uint id, uint split) locked public{\n		require(split <= 100);\n		splits[id] = split;\n	}\n	// [Step 1]: Set split of ’a’ (id = 0) to 100(%)\n        // [Step 4]: Set split of ’a’ (id = 0) to 0(%)\n	function splitFunds(uint id) public nonReentrant {\n		address payable a = payee1[id];\n		address payable b = payee2[id];\n		uint depo = deposits[id];\n		deposits[id] = 0;\n\n                // [Step 2]: Transfer 100% fund to ’a’\n                // [Step 3]: Reenter updateSplit\n		a.call{value:(depo * splits[id] / 100)}("""");\n                 \n                 // [Step 5]: Transfer 100% fund to ’b’\n		b.transfer(depo * (100 - splits[id]) / 100);\n\n		p();\n		d();\n 	}\n	function p() private {\n	}\n	function d() private {\n		p();\n\n	}\n}"
+5240838864,contract_body,true,false,false,false,14,1063,0,14,45,1,"{ \n	mapping(uint => uint) splits;\n	mapping(uint => uint) deposits;\n	mapping(uint => address payable) payee1;\n	mapping(uint => address payable) payee2;\n	uint lock;\n	modifier locked() {\n		require(lock == 0);\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	modifier nonReentrant() {\n		lock = 1;\n		_;\n		lock = 0;\n	}\n	function updateSplit(uint id, uint split) locked public{\n		require(split <= 100);\n		splits[id] = split;\n	}\n	// [Step 1]: Set split of ’a’ (id = 0) to 100(%)\n        // [Step 4]: Set split of ’a’ (id = 0) to 0(%)\n	function splitFunds(uint id) public nonReentrant {\n		address payable a = payee1[id];\n		address payable b = payee2[id];\n		uint depo = deposits[id];\n		deposits[id] = 0;\n\n                // [Step 2]: Transfer 100% fund to ’a’\n                // [Step 3]: Reenter updateSplit\n		a.call{value:(depo * splits[id] / 100)}("""");\n                 \n                 // [Step 5]: Transfer 100% fund to ’b’\n		b.transfer(depo * (100 - splits[id]) / 100);\n\n		p();\n		d();\n 	}\n	function p() private {\n	}\n	function d() private {\n		p();\n\n	}\n}"
+5240838648,function_definition,true,false,false,false,1028,1061,41,1,44,2,function d() private {\n		p();\n\n	}
+5240838544,function_body,true,false,false,false,1049,1061,41,22,44,2,{\n		p();\n\n	}
+5240838408,expression_statement,true,false,false,false,1053,1057,42,2,42,6,p();
+5240838304,call_expression,true,false,false,false,1053,1056,42,2,42,5,p()
+5240837936,identifier,true,false,false,false,1053,1054,42,2,42,3,p
+5240838536,visibility,true,false,false,false,1041,1048,41,14,41,21,private
+5240838520,identifier,true,false,false,false,1037,1038,41,10,41,11,d
+5240837656,function_definition,true,false,false,false,1001,1026,39,1,40,2,function p() private {\n	}
+5240837552,function_body,true,false,false,false,1022,1026,39,22,40,2,{\n	}
+5240837544,visibility,true,false,false,false,1014,1021,39,14,39,21,private
+5240837528,identifier,true,false,false,false,1010,1011,39,10,39,11,p
+5240837648,function_definition,true,false,false,false,533,999,23,1,38,3,"function splitFunds(uint id) public nonReentrant {\n		address payable a = payee1[id];\n		address payable b = payee2[id];\n		uint depo = deposits[id];\n		deposits[id] = 0;\n\n                // [Step 2]: Transfer 100% fund to ’a’\n                // [Step 3]: Reenter updateSplit\n		a.call{value:(depo * splits[id] / 100)}("""");\n                 \n                 // [Step 5]: Transfer 100% fund to ’b’\n		b.transfer(depo * (100 - splits[id]) / 100);\n\n		p();\n		d();\n 	}"
+5240837024,function_body,true,false,false,false,582,999,23,50,38,3,"{\n		address payable a = payee1[id];\n		address payable b = payee2[id];\n		uint depo = deposits[id];\n		deposits[id] = 0;\n\n                // [Step 2]: Transfer 100% fund to ’a’\n                // [Step 3]: Reenter updateSplit\n		a.call{value:(depo * splits[id] / 100)}("""");\n                 \n                 // [Step 5]: Transfer 100% fund to ’b’\n		b.transfer(depo * (100 - splits[id]) / 100);\n\n		p();\n		d();\n 	}"
+5240836792,expression_statement,true,false,false,false,991,995,37,2,37,6,d();
+5240836688,call_expression,true,false,false,false,991,994,37,2,37,5,d()
+5240836400,identifier,true,false,false,false,991,992,37,2,37,3,d
+5240836312,expression_statement,true,false,false,false,984,988,36,2,36,6,p();
+5240836208,call_expression,true,false,false,false,984,987,36,2,36,5,p()
+5240834400,identifier,true,false,false,false,984,985,36,2,36,3,p
+5240836304,expression_statement,true,false,false,false,936,980,34,2,34,46,b.transfer(depo * (100 - splits[id]) / 100);
+5240834000,call_expression,true,false,false,false,936,979,34,2,34,45,b.transfer(depo * (100 - splits[id]) / 100)
+5240835720,call_argument,true,false,false,false,947,978,34,13,34,44,depo * (100 - splits[id]) / 100
+5240834304,binary_expression,true,false,false,false,947,978,34,13,34,44,depo * (100 - splits[id]) / 100
+5240835616,number_literal,true,false,false,false,975,978,34,41,34,44,100
+5240835600,binary_expression,true,false,false,false,947,972,34,13,34,38,depo * (100 - splits[id])
+5240835504,parenthesized_expression,true,false,false,false,954,972,34,20,34,38,(100 - splits[id])
+5240835272,array_access,true,false,false,false,955,971,34,21,34,37,100 - splits[id]
+5240834960,identifier,true,false,false,false,968,970,34,34,34,36,id
+5240835376,binary_expression,true,false,false,false,955,967,34,21,34,33,100 - splits
+5240834864,identifier,true,false,false,false,961,967,34,27,34,33,splits
+5240835152,number_literal,true,false,false,false,955,958,34,21,34,24,100
+5240833904,identifier,true,false,false,false,947,951,34,13,34,17,depo
+5240835824,member_expression,true,false,false,false,936,946,34,2,34,12,b.transfer
+5240834112,identifier,true,false,false,false,938,946,34,4,34,12,transfer
+5240834096,identifier,true,false,false,false,936,937,34,2,34,3,b
+5240835928,comment,true,true,false,false,891,933,33,17,33,59,// [Step 5]: Transfer 100% fund to ’b’
+5240833816,expression_statement,true,false,false,false,811,855,31,2,31,46,"a.call{value:(depo * splits[id] / 100)}("""");"
+5240833696,call_expression,true,false,false,false,811,854,31,2,31,45,"a.call{value:(depo * splits[id] / 100)}("""")"
+5240831704,call_argument,true,false,false,false,851,853,31,42,31,44,""""""
+5240833328,string_literal,true,false,false,false,851,853,31,42,31,44,""""""
+5240832672,string,true,false,false,false,851,853,31,42,31,44,""""""
+5240833440,struct_expression,true,false,false,false,811,850,31,2,31,41,a.call{value:(depo * splits[id] / 100)}
+5240833232,struct_field_assignment,true,false,false,false,818,849,31,9,31,40,value:(depo * splits[id] / 100)
+5240833120,parenthesized_expression,true,false,false,false,824,849,31,15,31,40,(depo * splits[id] / 100)
+5240833000,binary_expression,true,false,false,false,825,848,31,16,31,39,depo * splits[id] / 100
+5240831840,number_literal,true,false,false,false,845,848,31,36,31,39,100
+5240831824,array_access,true,false,false,false,825,842,31,16,31,33,depo * splits[id]
+5240831520,identifier,true,false,false,false,839,841,31,30,31,32,id
+5240832880,binary_expression,true,false,false,false,825,838,31,16,31,29,depo * splits
+5240832000,identifier,true,false,false,false,832,838,31,23,31,29,splits
+5240830672,identifier,true,false,false,false,825,829,31,16,31,20,depo
+5240833104,identifier,true,false,false,false,818,823,31,9,31,14,value
+5240833216,member_expression,true,false,false,false,811,817,31,2,31,8,a.call
+5240831168,identifier,true,false,false,false,813,817,31,4,31,8,call
+5240831152,identifier,true,false,false,false,811,812,31,2,31,3,a
+5240833808,comment,true,true,false,false,776,808,30,16,30,48,// [Step 3]: Reenter updateSplit
+5240833800,comment,true,true,false,false,717,759,29,16,29,58,// [Step 2]: Transfer 100% fund to ’a’
+5240833792,expression_statement,true,false,false,false,682,699,27,2,27,19,deposits[id] = 0;
+5240829712,assignment_expression,true,false,false,false,682,698,27,2,27,18,deposits[id] = 0
+5240829920,number_literal,true,false,false,false,697,698,27,17,27,18,0
+5240829904,array_access,true,false,false,false,682,694,27,2,27,14,deposits[id]
+5240829808,identifier,true,false,false,false,691,693,27,11,27,13,id
+5240829168,identifier,true,false,false,false,682,690,27,2,27,10,deposits
+5240828840,variable_declaration_statement,true,false,false,false,654,679,26,2,26,27,uint depo = deposits[id];
+5240828944,array_access,true,false,false,false,666,678,26,14,26,26,deposits[id]
+5240829072,identifier,true,false,false,false,675,677,26,23,26,25,id
+5240828736,identifier,true,false,false,false,666,674,26,14,26,22,deposits
+5240828928,variable_declaration,true,false,false,false,654,663,26,2,26,11,uint depo
+5240828648,identifier,true,false,false,false,659,663,26,7,26,11,depo
+5240828640,type_name,true,false,false,false,654,658,26,2,26,6,uint
+5240828432,primitive_type,true,false,false,false,654,658,26,2,26,6,uint
+5240828008,variable_declaration_statement,true,false,false,false,620,651,25,2,25,33,address payable b = payee2[id];
+5240828112,array_access,true,false,false,false,640,650,25,22,25,32,payee2[id]
+5240828240,identifier,true,false,false,false,647,649,25,29,25,31,id
+5240827904,identifier,true,false,false,false,640,646,25,22,25,28,payee2
+5240828096,variable_declaration,true,false,false,false,620,637,25,2,25,19,address payable b
+5240827816,identifier,true,false,false,false,636,637,25,18,25,19,b
+5240827808,type_name,true,false,false,false,620,635,25,2,25,17,address payable
+5240827312,primitive_type,true,false,false,false,620,635,25,2,25,17,address payable
+5240828000,variable_declaration_statement,true,false,false,false,586,617,24,2,24,33,address payable a = payee1[id];
+5240827520,array_access,true,false,false,false,606,616,24,22,24,32,payee1[id]
+5240827408,identifier,true,false,false,false,613,615,24,29,24,31,id
+5240827120,identifier,true,false,false,false,606,612,24,22,24,28,payee1
+5240827504,variable_declaration,true,false,false,false,586,603,24,2,24,19,address payable a
+5240827032,identifier,true,false,false,false,602,603,24,18,24,19,a
+5240827024,type_name,true,false,false,false,586,601,24,2,24,17,address payable
+5240826928,primitive_type,true,false,false,false,586,601,24,2,24,17,address payable
+5240826744,modifier_invocation,true,false,false,false,569,581,23,37,23,49,nonReentrant
+5240826544,identifier,true,false,false,false,569,581,23,37,23,49,nonReentrant
+5240826736,visibility,true,false,false,false,562,568,23,30,23,36,public
+5240826344,parameter,true,false,false,false,553,560,23,21,23,28,uint id
+5240826248,identifier,true,false,false,false,558,560,23,26,23,28,id
+5240826240,type_name,true,false,false,false,553,557,23,21,23,25,uint
+5240826144,primitive_type,true,false,false,false,553,557,23,21,23,25,uint
+5240837000,identifier,true,false,false,false,542,552,23,10,23,20,splitFunds
+5240837136,comment,true,true,false,false,481,531,22,8,22,58,// [Step 4]: Set split of ’a’ (id = 0) to 0(%)
+5240837128,comment,true,true,false,false,420,472,21,1,21,53,// [Step 1]: Set split of ’a’ (id = 0) to 100(%)
+5240825960,function_definition,true,false,false,false,312,418,17,1,20,2,"function updateSplit(uint id, uint split) locked public{\n		require(split <= 100);\n		splits[id] = split;\n	}"
+5240825856,function_body,true,false,false,false,367,418,17,56,20,2,{\n		require(split <= 100);\n		splits[id] = split;\n	}
+5240823448,expression_statement,true,false,false,false,396,415,19,2,19,21,splits[id] = split;
+5240825664,assignment_expression,true,false,false,false,396,414,19,2,19,20,splits[id] = split
+5240823344,identifier,true,false,false,false,409,414,19,15,19,20,split
+5240808720,array_access,true,false,false,false,396,406,19,2,19,12,splits[id]
+5240823968,identifier,true,false,false,false,403,405,19,9,19,11,id
+5240823248,identifier,true,false,false,false,396,402,19,2,19,8,splits
+5240823440,expression_statement,true,false,false,false,371,393,18,2,18,24,require(split <= 100);
+5240823152,call_expression,true,false,false,false,371,392,18,2,18,23,require(split <= 100)
+5240822952,call_argument,true,false,false,false,379,391,18,10,18,22,split <= 100
+5240822224,binary_expression,true,false,false,false,379,391,18,10,18,22,split <= 100
+5240822848,number_literal,true,false,false,false,388,391,18,19,18,22,100
+5240822128,identifier,true,false,false,false,379,384,18,10,18,15,split
+5240822032,identifier,true,false,false,false,371,378,18,2,18,9,require
+5240821944,visibility,true,false,false,false,361,367,17,50,17,56,public
+5240821936,modifier_invocation,true,false,false,false,354,360,17,43,17,49,locked
+5240821648,identifier,true,false,false,false,354,360,17,43,17,49,locked
+5240821448,parameter,true,false,false,false,342,352,17,31,17,41,uint split
+5240821352,identifier,true,false,false,false,347,352,17,36,17,41,split
+5240821344,type_name,true,false,false,false,342,346,17,31,17,35,uint
+5240821248,primitive_type,true,false,false,false,342,346,17,31,17,35,uint
+5240821544,parameter,true,false,false,false,333,340,17,22,17,29,uint id
+5240821064,identifier,true,false,false,false,338,340,17,27,17,29,id
+5240821056,type_name,true,false,false,false,333,337,17,22,17,26,uint
+5240820960,primitive_type,true,false,false,false,333,337,17,22,17,26,uint
+5240825832,identifier,true,false,false,false,321,332,17,10,17,21,updateSplit
+5240825952,modifier_definition,true,false,false,false,253,310,12,1,16,2,modifier nonReentrant() {\n		lock = 1;\n		_;\n		lock = 0;\n	}
+5240820680,function_body,true,false,false,false,277,310,12,25,16,2,{\n		lock = 1;\n		_;\n		lock = 0;\n	}
+5240820456,expression_statement,true,false,false,false,298,307,15,2,15,11,lock = 0;
+5240820352,assignment_expression,true,false,false,false,298,306,15,2,15,10,lock = 0
+5240820256,number_literal,true,false,false,false,305,306,15,9,15,10,0
+5240819888,identifier,true,false,false,false,298,302,15,2,15,6,lock
+5240819800,expression_statement,true,false,false,false,293,295,14,2,14,4,_;
+5240819600,identifier,true,false,false,false,293,294,14,2,14,3,_
+5240819792,expression_statement,true,false,false,false,281,290,13,2,13,11,lock = 1;
+5240819424,assignment_expression,true,false,false,false,281,289,13,2,13,10,lock = 1
+5240819328,number_literal,true,false,false,false,288,289,13,9,13,10,1
+5240818960,identifier,true,false,false,false,281,285,13,2,13,6,lock
+5240820664,identifier,true,false,false,false,262,274,12,10,12,22,nonReentrant
+5240818776,modifier_definition,true,false,false,false,178,251,6,1,11,2,modifier locked() {\n		require(lock == 0);\n		lock = 1;\n		_;\n		lock = 0;\n	}
+5240818680,function_body,true,false,false,false,196,251,6,19,11,2,{\n		require(lock == 0);\n		lock = 1;\n		_;\n		lock = 0;\n	}
+5240818456,expression_statement,true,false,false,false,239,248,10,2,10,11,lock = 0;
+5240818352,assignment_expression,true,false,false,false,239,247,10,2,10,10,lock = 0
+5240818256,number_literal,true,false,false,false,246,247,10,9,10,10,0
+5240817888,identifier,true,false,false,false,239,243,10,2,10,6,lock
+5240817800,expression_statement,true,false,false,false,234,236,9,2,9,4,_;
+5240817600,identifier,true,false,false,false,234,235,9,2,9,3,_
+5240817432,expression_statement,true,false,false,false,222,231,8,2,8,11,lock = 1;
+5240817328,assignment_expression,true,false,false,false,222,230,8,2,8,10,lock = 1
+5240817232,number_literal,true,false,false,false,229,230,8,9,8,10,1
+5240816864,identifier,true,false,false,false,222,226,8,2,8,6,lock
+5240817424,expression_statement,true,false,false,false,200,219,7,2,7,21,require(lock == 0);
+5240816768,call_expression,true,false,false,false,200,218,7,2,7,20,require(lock == 0)
+5240816456,call_argument,true,false,false,false,208,217,7,10,7,19,lock == 0
+5240815184,binary_expression,true,false,false,false,208,217,7,10,7,19,lock == 0
+5240816352,number_literal,true,false,false,false,216,217,7,18,7,19,0
+5240815088,identifier,true,false,false,false,208,212,7,10,7,14,lock
+5240814992,identifier,true,false,false,false,200,207,7,2,7,9,require
+5240818664,identifier,true,false,false,false,187,193,6,10,6,16,locked
+5240818768,state_variable_declaration,true,false,false,false,166,176,5,1,5,11,uint lock;
+5240814696,identifier,true,false,false,false,171,175,5,6,5,10,lock
+5240814688,type_name,true,false,false,false,166,170,5,1,5,5,uint
+5240814512,primitive_type,true,false,false,false,166,170,5,1,5,5,uint
+5240814328,state_variable_declaration,true,false,false,false,124,164,4,1,4,41,mapping(uint => address payable) payee2;
+5240814216,identifier,true,false,false,false,157,163,4,34,4,40,payee2
+5240814208,type_name,true,false,false,false,124,156,4,1,4,33,mapping(uint => address payable)
+5240813936,type_name,true,false,false,false,140,155,4,17,4,32,address payable
+5240813808,primitive_type,true,false,false,false,140,155,4,17,4,32,address payable
+5240813920,primitive_type,true,false,false,false,132,136,4,9,4,13,uint
+5240814320,state_variable_declaration,true,false,false,false,82,122,3,1,3,41,mapping(uint => address payable) payee1;
+5240813416,identifier,true,false,false,false,115,121,3,34,3,40,payee1
+5240813408,type_name,true,false,false,false,82,114,3,1,3,33,mapping(uint => address payable)
+5240813136,type_name,true,false,false,false,98,113,3,17,3,32,address payable
+5240813008,primitive_type,true,false,false,false,98,113,3,17,3,32,address payable
+5240813120,primitive_type,true,false,false,false,90,94,3,9,3,13,uint
+5240812728,state_variable_declaration,true,false,false,false,49,80,2,1,2,32,mapping(uint => uint) deposits;
+5240812616,identifier,true,false,false,false,71,79,2,23,2,31,deposits
+5240812608,type_name,true,false,false,false,49,70,2,1,2,22,mapping(uint => uint)
+5240812096,type_name,true,false,false,false,65,69,2,17,2,21,uint
+5240811968,primitive_type,true,false,false,false,65,69,2,17,2,21,uint
+5240812080,primitive_type,true,false,false,false,57,61,2,9,2,13,uint
+5240812720,state_variable_declaration,true,false,false,false,18,47,1,1,1,30,mapping(uint => uint) splits;
+5240811672,identifier,true,false,false,false,40,46,1,23,1,29,splits
+5240811664,type_name,true,false,false,false,18,39,1,1,1,22,mapping(uint => uint)
+5240811232,type_name,true,false,false,false,34,38,1,17,1,21,uint
+5240811104,primitive_type,true,false,false,false,34,38,1,17,1,21,uint
+5240811216,primitive_type,true,false,false,false,26,30,1,9,1,13,uint
+5240838856,identifier,true,false,false,false,9,13,0,9,0,13,Test

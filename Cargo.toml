@@ -18,7 +18,8 @@ members = [
     "treeedbgen-souffle-javascript",
     "treeedbgen-souffle-rust",
     "treeedbgen-souffle-souffle",
-    "treeedbgen-souffle-swift",
+    "treeedbgen-souffle-swift", 
+    "treeedbgen-souffle-solidity", "treeedb-solidity",
 ]
 
 [profile.release]
